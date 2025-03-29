@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NENWA - Recipes & Budget Tracker</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.js"></script>
+<link rel="icon" href="NENWA.png">
+<style>
+/* 页面全局样式 */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(180deg, #fff7f2 0%, #ffe5d8 100%); /* 暖色背景渐变 */
+    color: #333;
+}
+
+.hidden-content {
+    display: none;
+}
+
+/* 🔹 导航栏样式 */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+    color: white;
+    padding: 12px 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-20px); /* 初始上移隐藏 */
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.navbar.show {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links li {
+    display: inline;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.1em;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #ffdede;
+}
+
+.logo img {
+    width: 50px;
+    height: auto;
+}
+
+#toggleNav {
+    position: fixed;
+    top: 15px; /* 调整按钮距离顶部的距离 */
+    left: 15px; /* 调整按钮距离左侧的距离 */
+    background: none;
+    border: none;
+    font-size: 24px; /* 放大按钮 */
+    cursor: pointer;
+    z-index: 1100; /* 确保在最前面 */
+    color: white; /* 让按钮颜色与导航栏一致 */
+}
+
+#toggleNav:hover {
+    color: #ffdede; /* 悬停时变浅 */
+}
+
+/* 搜索按钮样式 */
+.nav-links li {
+    display: flex;
+    align-items: center;
+}
+
+.search-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.search-btn:hover {
+    transform: scale(1.1); /* 悬停时放大 */
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.3); /* 添加光晕 */
+}
+
+.search-btn:active {
+    transform: scale(0.95); /* 点击时缩小 */
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.2); /* 减弱光晕 */
+}
+
+/* 搜索栏样式 */
+.search-bar {
+    position: fixed;
+    top: 70px;
+    right: 20px;
+    width: 250px;
+    padding: 10px;
+    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1000;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+/* 🔹 回到顶部按钮 */
+.back-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #ff9a9e;
+    color: white;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    cursor: pointer;
+    display: none; /* 默认隐藏 */
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.back-to-top:hover {
+    background: #ff6b6b;
+}
+
+.back-to-top.show {
+    display: block; /* 显示按钮 */
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+/* Sticky Header Design */
+#poetry-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    height: 180px;
+    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+    color: #fff;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    border-bottom: 3px solid rgba(255, 255, 255, 0.3);
+    padding: 15px 20px;
+}
+
+#poetry-header h1 {
+    font-size: 2.5em;
+    font-family: 'Georgia', serif;
+    color: #fff;
+    margin: 5px 0;
+    letter-spacing: 2px;
+}
+
+#poetry-header p {
+    font-size: 1.3em;
+    font-style: italic;
+    line-height: 1.6;
+    color: #f8f8f8;
+    margin: 10px 0 0;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+/* 按钮样式 */
+button, .btn, input[type="text"], textarea, input[type="number"] {
+    width: 80%; /* 默认占用宽度 */
+    max-width: 400px; /* 大屏下适当限制宽度 */
+    margin: 0 auto; /* 居中显示 */
+    box-sizing: border-box; /* 包含padding和border */
+}
+
+button, .btn {
+    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    font-size: 1.1em;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
+    cursor: pointer;
+    width: auto;
+}
+
+button:hover, .btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    background: linear-gradient(135deg, #ff6b6b 0%, #fad0c4 100%);
+}
+
+button:active, .btn:active {
+    transform: scale(0.98);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+}
+
+button, .delete-btn {
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+/* 输入框样式 */
+input[type="text"], textarea, input[type="number"] {
+    width: 100%;
+    max-width: 400px;
+    padding: 12px;
+    border: 2px solid #fad0c4;
+    border-radius: 8px;
+    font-size: 1em;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input[type="text"]:focus, textarea:focus, input[type="number"]:focus {
+    outline: none;
+    border-color: #ff9a9e;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+input[type="text"]:hover, textarea:hover, input[type="number"]:hover {
+    border-color: #ff9a9e;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* 链接样式 */
+a {
+    color: #ff6b6b;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+a:hover {
+    color: #ff4a4a;
+}
+
+/* 表格样式 */
+table {
+    table-layout: fixed;
+    width: 90%;
+    max-width: 1200px;
+    border-collapse: collapse;
+    border-spacing: 6px;
+    margin-top: 20px;
+    font-size: 0.9em;
+    overflow-x: auto;
+    white-space: nowrap;
+    margin: 0 auto;
+}
+
+table th, table td {
+    border: 1px solid #fad0c4;
+    padding: 12px;
+    text-align: left;
+    font-size: 1.05em;
+}
+
+table th {
+    background: #ff9a9e;
+    color: #fff;
+}
+
+table tr:nth-child(even) {
+    background: #ffe5d8;
+}
+
+table tr:hover {
+    background: #ffd2c3;
+}
+
+table td button.delete-btn {
+    background: #ff6b6b;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background 0.3s;
+}
+
+table td button.delete-btn:hover {
+    background: #ff4a4a;
+}
+
+@media (min-width: 1024px) {
+    #poetry-header {
+        width: 100%; /* Sticky 部分宽度贴满屏幕 */
+    }
+
+    #poetry-header h1 {
+        font-size: 3em;
+    }
+
+    button, .btn {
+        font-size: 1.2em;
+    }
+
+    table {
+        font-size: 1.2em;
+    }
+}
+
+@media (max-width: 768px) {
+    #poetry-header {
+        width: 100%; /* Sticky 部分宽度贴满屏幕 */
+    }
+    table {
+        font-size: 0.5em; /* 进一步缩小字体 */
+        overflow-x: auto; /* 启用滚动 */
+        word-wrap: break-word; /* 长内容自动换行 */
+    }
+    table th, table td {
+        padding: 8px; /* 保持适当的单元格间距 */
+    }
+    body {
+        font-size: 14px;
+    }
+    .container {
+        width: 100%;
+        padding: 10px;
+    }
+    .nav-links {
+        display: none; /* 隐藏导航栏 */
+    }
+    .menu-icon {
+        display: block; /* 显示汉堡菜单 */
+    }
+}
+
+@media (max-width: 480px) {
+    #poetry-header {
+        width: 100%; /* 确保宽度贴满屏幕 */
+    }
+    #poetry-header h1 {
+        font-size: 1.6em; /* 进一步缩小标题字体 */
+    }
+    #poetry-header p {
+        font-size: 0.9em; /* 略缩小段落文字 */
+        line-height: 1.4;
+        padding: 0 8px;
+    }
+    table {
+        font-size: 0.6em; /* 调整表格字体大小为更适合小屏幕的尺寸 */
+        overflow-x: auto; /* 启用横向滚动，防止内容溢出屏幕 */
+    }
+    table th, table td {
+        padding: 6px; /* 减少表格单元格间距 */
+    }
+    body {
+        padding: 8px; /* 减少整体内边距，留出更多空间 */
+    }
+}
+
+#budget > div {
+    margin-bottom: 20px; /* 间距 */
+}
+
+#totalAmount {
+    transition: background-color 0.3s ease;
+}
+
+#remainingAmount {
+    transition: background-color 0.3s ease;
+}
+</style>
+</head>
+<body>
+
+<!-- Header Section -->
+<header id="poetry-header">
+<div class="overlay">
+<button id="toggleNav">☰</button>
+        <h1>秋书叶落</h1>
+    </div>
+</header>
+
+<!-- 🔹 导航栏 -->
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="index.html" class="logo"><img src="NENWA.png" alt="Logo"></a>
+        <ul class="nav-links">
+            <li><a href="#recipes">Recipes</a></li>
+            <li><a href="#budget">Budget Tracker</a></li>
+            <li><a href="#" id="searchToggle" class="search-btn">🔍</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- 搜索栏 -->
+<div id="searchBar" class="search-bar">
+    <input type="text" id="searchInput" placeholder="Type here and search...">
+    <button id="searchBtn">Search</button>
+</div>
+
+<!-- 🔹 回到顶部按钮 -->
+<button id="backToTop" class="back-to-top">⬆ Back to Top</button>
+
+<!-- 隐藏内容 -->
+<div class="hidden-content">
+    <h3><a href="natsuryoumen.HTML">natsuryoumen なつ涼麺（なつりょうめん）</a></h3>
+    <h3><a href="zichuandepianzhang.HTML">紫川的篇章</a></h3>
+</div>
+
+<!-- Recipes Section -->
+<div id="recipes" class="section">
+    <span class="anchor" id="recipes"></span>
+    <h2>Recipes</h2>
+    <h3><a href="oyakodon.HTML">oyakodon 亲子丼（おやこどん）</a></h3>
+    <h3><a href="tendon.HTML">tendon 天丼（てんどん）</a></h3>
+    <h3><a href="gyuudon.HTML">gyuudon 牛丼（ぎゅうどん）</a></h3>
+    <h3><a href="katsudon.HTML">katsudon かつ丼（かつどん）</a></h3>
+    <h3><a href="yakisoba.HTML">yakisoba 焼きそば（やきそば）</a></h3>
+    <h3><a href="yakiudon.HTML">yakiudon 焼うどん（やきうどん）</a></h3>
+    <h3><a href="kakeudon.HTML">kakeudon かけうどん</a></h3>
+    <h3><a href="tacorice.HTML">tacorice タコライス</a></h3>
+    <h3><a href="makunouchibentou.HTML">makunouchibentou 幕の内弁当（まくのうちべんとう）</a></h3>
+    <h3><a href="noriben.HTML">noriben のり弁（のりべん）</a></h3>
+   </div>
+
+<!-- Budget Section -->
+<div id="budget" class="section">
+    <span class="anchor" id="budget"></span>
+    <h2>Budget Tracker</h2>
+
+<!-- Income Section -->
+<div>
+    <label for="incomeDate">Date:</label>
+    <input type="date" id="incomeDate">
+    <br><br>
+    <label for="incomeSource">Income Source:</label>
+    <input type="text" id="incomeSource" placeholder="Enter income source" required>
+    <br>
+    <label for="incomeAmount">Amount (RM):</label>
+    <input type="number" id="incomeAmount" placeholder="Enter income amount" min="0" step="0.01" required>
+    <br>
+    <button id="addIncomeBtn" aria-label="Add Income Record">Add Income</button>
+</div>
+ <br>
+    <h3>Income Records:</h3>
+    <table id="incomeTable" border="1">
+        <thead>
+            <tr>
+                <th>Source</th>
+                <th>Amount (RM)</th>
+		<th>Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Income items will be dynamically added here -->
+        </tbody>
+    </table>
+    <br><br>
+
+<!-- Expenses Section -->
+<div>
+    <label for="expenseDate">Date:</label>
+    <input type="date" id="expenseDate">
+    <br><br>
+    <label for="itemName">Item Name (Expense):</label>
+    <input type="text" id="itemName" placeholder="Enter item name">
+    <br>
+    <label for="itemPrice">Price (RM):</label>
+    <input type="number" id="itemPrice" placeholder="Enter item price" min="0" step="0.01">
+    <br>
+    <label for="itemQuantity">Quantity:</label>
+    <input type="number" id="itemQuantity" placeholder="Enter item quantity" value="1" min="1">
+    <br>
+    <button id="addItemBtn" aria-label="Add Expense">Add Expense</button>
+</div>
+    <br>
+    <h3>Expenses:</h3>
+    <table id="expenseTable" border="1">
+        <thead>
+            <tr>
+                <th>Item Name</th>
+                <th>Price (RM)</th>
+                <th>Quantity</th>
+                <th>Total (RM)</th>
+		<th>Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Expense items will be dynamically added here -->
+        </tbody>
+    </table>
+<br><br>
+<div>
+<p id="totalPrice">Total Price: RM <span id="totalAmount">0</span></p>
+</div>
+<div>
+<p id="remainingBudget">Remaining Budget: RM <span id="remainingAmount">0</span></p>
+</div>
+
+    <!-- Clear All Data Button -->
+    <button id="clearDataBtn">Clear All Data</button>
+</div>
+<br><br>
+
+<!-- Date Range Filter -->
+<div>
+    <label for="startDate">Start Date:</label>
+    <input type="date" id="startDate">
+    <br><br>
+    <label for="endDate">End Date:</label>
+    <input type="date" id="endDate">
+    <br><br>
+    <button id="filterBtn" aria-label="Filter Records">Filter</button>
+</div>
+<br>
+
+<div>
+    <h3>Future Prediction:</h3>
+    <p id="predictedIncome">Predicted income for next month: RM 0.00</p>
+    <p id="predictedExpense">Predicted expense for next month: RM 0.00</p>
+    <p id="budgetSuggestion"></p>
+<button id="predictBtn" aria-label="Predict Future">Predict Future</button>
+</div>
+<br>
+
+<footer>
+    <p>© 2024 NENWA. All rights reserved.</p>
+    <p>
+        <a href="Privacy_Policy.HTML">Privacy Policy</a> |
+        <a href="Terms_of_Service.HTML">Terms of Service</a> |
+        <a href="Contact_Us.HTML">Contact Us</a>
+    </p>
+</footer>
+
+<script>
+// 切换搜索栏的显示/隐藏
+document.getElementById("searchToggle").addEventListener("click", function() {
+    var searchBar = document.getElementById("searchBar");
+    searchBar.style.display = searchBar.style.display === "flex" ? "none" : "flex";
+});
+
+// 搜索逻辑封装为一个函数
+function performSearch() {
+    var query = document.getElementById("searchInput").value.toLowerCase().trim();
+
+    if (!query) {
+        alert("请输入搜索内容！");
+        return;
+    }
+
+    var recipes = document.querySelectorAll("#recipes h3 a"); // 可见的菜谱
+    var hiddenSections = document.querySelectorAll(".hidden-content"); // 隐藏的菜谱区块
+    let found = false;
+
+    function normalizeText(text) {
+        return text.replace(/\s+/g, "").toLowerCase(); // 去掉空格并转为小写
+    }
+
+    // 处理可见的菜谱
+    recipes.forEach(function(recipe) {
+        if (!recipe.textContent) return;
+
+        let text = normalizeText(recipe.textContent);
+        if (text.includes(normalizeText(query))) {
+            recipe.style.display = "block"; // 显示匹配的菜谱
+            found = true;
+        } else {
+            recipe.style.display = "none";  // 隐藏未匹配的菜谱
+        }
+    });
+
+    // 处理隐藏的内容
+    hiddenSections.forEach(function(section) {
+        let hasMatch = false;
+        let items = section.querySelectorAll("*"); // 选择该隐藏区域下的所有元素
+
+        items.forEach(function(item) {
+            if (!item.textContent) return;
+
+            let text = normalizeText(item.textContent);
+            if (text.includes(normalizeText(query))) {
+                item.style.display = "block"; // 仅显示匹配的子项
+                hasMatch = true;
+                found = true;
+            } else {
+                item.style.display = "none";  // 其他内容隐藏
+            }
+        });
+
+        // **如果该 `.hidden-content` 里完全没有匹配项，则仍然隐藏**
+        section.style.display = hasMatch ? "block" : "none";
+    });
+
+    if (!found) {
+        alert("未找到匹配的菜谱，请尝试使用日语、中文或英语搜索！");
+    }
+}
+
+// 监听点击搜索按钮
+document.getElementById("searchBtn").addEventListener("click", performSearch);
+
+// 监听输入框的 Enter 键
+document.getElementById("searchInput").addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        performSearch(); // 触发搜索
+    }
+});
+
+// 导航栏展开/折叠
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("toggleNav").addEventListener("click", function() {
+        var navbar = document.querySelector(".navbar");
+        navbar.classList.toggle("show");
+    });
+});
+
+// 🔹 监听滚动事件，显示/隐藏按钮
+window.addEventListener("scroll", function () {
+    let backToTopBtn = document.getElementById("backToTop");
+    if (window.scrollY > 300) {
+        backToTopBtn.classList.add("show");
+    } else {
+        backToTopBtn.classList.remove("show");
+    }
+});
+
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault(); // 阻止默认的跳转行为
+        const targetId = this.getAttribute('href'); // 获取目标部分的ID
+        const target = document.querySelector(targetId); // 查找目标部分
+
+        if (target) {
+            const headerHeight = document.querySelector('header').offsetHeight; // 获取头部高度
+            const position = target.offsetTop - headerHeight; // 计算目标位置
+
+            window.scrollTo({
+                top: position, // 滚动到目标位置
+                behavior: 'smooth', // 启用平滑滚动效果
+            });
+        }
+    });
+});
+
+// 🔹 点击按钮，回到页面顶部
+document.getElementById("backToTop").addEventListener("click", function () {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+// 全局变量
+let incomeRecords = [];
+let expenseRecords = [];
+
+// 本地存储加载与保存
+function saveDataToLocalStorage() {
+    const data = { incomeRecords, expenseRecords };
+    localStorage.setItem("budgetData", JSON.stringify(data));
+}
+
+function loadDataFromLocalStorage() {
+    const data = JSON.parse(localStorage.getItem("budgetData"));
+    if (data) {
+        incomeRecords = data.incomeRecords || [];
+        expenseRecords = data.expenseRecords || [];
+        renderIncomeTable();
+        renderExpenseTable();
+        updateBudget();
+    }
+}
+
+// 添加收入
+function addIncome() {
+    const date = document.getElementById("incomeDate").value;
+    const source = document.getElementById("incomeSource").value;
+    const amount = parseFloat(document.getElementById("incomeAmount").value);
+
+    if (!date || !source || isNaN(amount) || amount <= 0) {
+        alert("Please fill in all income fields correctly.");
+        return;
+    }
+
+    let found = false;
+    incomeRecords.forEach(record => {
+        if (record.source === source && record.date === date) {
+            record.amount += amount; // 叠加金额
+            found = true;
+        }
+    });
+
+    if (!found) {
+        incomeRecords.push({ id: Date.now(), source, amount, date });
+    }
+
+    renderIncomeTable();
+    updateBudget();
+    saveDataToLocalStorage();
+
+    document.getElementById("incomeDate").value = "";
+    document.getElementById("incomeSource").value = "";
+    document.getElementById("incomeAmount").value = "";
+}
+
+// 渲染收入表格
+function renderIncomeTable() {
+    const tbody = document.getElementById("incomeTable").querySelector("tbody");
+    tbody.innerHTML = "";
+    incomeRecords.forEach(record => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${record.source}</td>
+            <td>${record.amount.toFixed(2)}</td>
+            <td>${record.date}</td>
+            <td><button onclick="deleteIncome(${record.id})">Delete</button></td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+// 删除收入
+function deleteIncome(id) {
+    incomeRecords = incomeRecords.filter(record => record.id !== id);
+    renderIncomeTable();
+    updateBudget();
+    saveDataToLocalStorage();
+}
+
+// 添加支出
+function addExpense() {
+    const date = document.getElementById("expenseDate").value;
+    const name = document.getElementById("itemName").value;
+    const price = parseFloat(document.getElementById("itemPrice").value);
+    const quantity = parseInt(document.getElementById("itemQuantity").value);
+
+    if (!date || !name || isNaN(price) || isNaN(quantity) || price <= 0 || quantity <= 0) {
+        alert("Please fill in all expense fields correctly.");
+        return;
+    }
+
+    let found = false;
+    expenseRecords.forEach(record => {
+        if (record.name === name && record.price === price && record.date === date) {
+            record.quantity += quantity; // 叠加数量
+            record.total += price * quantity; // 叠加总价
+            found = true;
+        }
+    });
+
+    if (!found) {
+        expenseRecords.push({ id: Date.now(), name, price, quantity, total: price * quantity, date });
+    }
+
+    renderExpenseTable();
+    updateBudget();
+    saveDataToLocalStorage();
+
+    document.getElementById("expenseDate").value = "";
+    document.getElementById("itemName").value = "";
+    document.getElementById("itemPrice").value = "";
+    document.getElementById("itemQuantity").value = 1;
+}
+
+// 渲染支出表格
+function renderExpenseTable() {
+    const tbody = document.getElementById("expenseTable").querySelector("tbody");
+    tbody.innerHTML = "";
+    expenseRecords.forEach(record => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${record.name}</td>
+            <td>${record.price.toFixed(2)}</td>
+            <td>${record.quantity}</td>
+            <td>${record.total.toFixed(2)}</td>
+            <td>${record.date}</td>
+            <td><button onclick="deleteExpense(${record.id})">Delete</button></td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+// 删除支出
+function deleteExpense(id) {
+    expenseRecords = expenseRecords.filter(record => record.id !== id);
+    renderExpenseTable();
+    updateBudget();
+    saveDataToLocalStorage();
+}
+
+// 更新预算
+function updateBudget() {
+    const totalIncome = incomeRecords.reduce((sum, record) => sum + record.amount, 0);
+    const totalExpenses = expenseRecords.reduce((sum, record) => sum + record.total, 0);
+    const remainingBudget = totalIncome - totalExpenses;
+
+    document.getElementById("totalAmount").textContent = totalExpenses.toFixed(2);
+    document.getElementById("remainingAmount").textContent = remainingBudget.toFixed(2);
+}
+
+// 清空数据
+function clearData() {
+    if (confirm("Are you sure you want to clear all data?")) {
+        incomeRecords = [];
+        expenseRecords = [];
+        renderIncomeTable();
+        renderExpenseTable();
+        updateBudget();
+        localStorage.removeItem("budgetData");
+    }
+}
+
+// 日期过滤
+function filterRecords() {
+    const startDate = new Date(document.getElementById("startDate").value);
+    const endDate = new Date(document.getElementById("endDate").value);
+
+    const filteredIncome = incomeRecords.filter(record => {
+        const recordDate = new Date(record.date);
+        return recordDate >= startDate && recordDate <= endDate;
+    });
+
+    const filteredExpense = expenseRecords.filter(record => {
+        const recordDate = new Date(record.date);
+        return recordDate >= startDate && recordDate <= endDate;
+    });
+
+    renderFilteredTables(filteredIncome, filteredExpense);
+}
+
+// 渲染过滤后的表格
+function renderFilteredTables(filteredIncome, filteredExpense) {
+    const incomeTbody = document.getElementById("incomeTable").querySelector("tbody");
+    incomeTbody.innerHTML = "";
+    filteredIncome.forEach(record => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${record.source}</td>
+            <td>${record.amount.toFixed(2)}</td>
+            <td>${record.date}</td>
+            <td><button onclick="deleteIncome(${record.id})">Delete</button></td>
+        `;
+        incomeTbody.appendChild(row);
+    });
+
+    const expenseTbody = document.getElementById("expenseTable").querySelector("tbody");
+    expenseTbody.innerHTML = "";
+    filteredExpense.forEach(record => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${record.name}</td>
+            <td>${record.price.toFixed(2)}</td>
+            <td>${record.quantity}</td>
+            <td>${record.total.toFixed(2)}</td>
+            <td>${record.date}</td>
+            <td><button onclick="deleteExpense(${record.id})">Delete</button></td>
+        `;
+        expenseTbody.appendChild(row);
+    });
+}
+
+document.getElementById("addIncomeBtn").addEventListener("click", addIncome);
+document.getElementById("addItemBtn").addEventListener("click", addExpense);
+document.getElementById("clearDataBtn").addEventListener("click", clearData);
+document.getElementById("filterBtn").addEventListener("click", filterRecords);
+// 绑定预测按钮事件
+document.getElementById("predictBtn").addEventListener("click", updatePredictionUI);
+
+
+// 加载本地存储数据
+window.onload = loadDataFromLocalStorage;
+
+function calculateMovingAverage(data, period = 3) {
+    if (data.length < period) return null; // Return null if not enough data
+    let sum = 0;
+    for (let i = 0; i < period; i++) {
+        sum += data[data.length - 1 - i]; // Take the last N months' data
+    }
+    return sum / period;
+}
+
+function calculateLinearRegression(data) {
+    const n = data.length;
+    let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
+
+    // Calculate the necessary sums
+    for (let i = 0; i < n; i++) {
+        sumX += i;          // Time series: 0, 1, 2, ...
+        sumY += data[i];    // Income or expense data
+        sumXY += i * data[i];
+        sumX2 += i * i;
+    }
+
+    // Calculate the regression coefficients
+    const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+    const intercept = (sumY - slope * sumX) / n;
+
+    return { slope, intercept };
+}
+
+function predictLinearRegression(data, futureIndex) {
+    const { slope, intercept } = calculateLinearRegression(data);
+    return slope * futureIndex + intercept; // Predict the future value
+}
+
+function predictFutureIncomeOrExpenses() {
+    const lastMonthsIncome = incomeRecords.map(record => record.amount);
+    const lastMonthsExpenses = expenseRecords.map(record => record.total);
+
+    console.log("Income Records:", lastMonthsIncome);  // 检查收入数据
+    console.log("Expense Records:", lastMonthsExpenses);  // 检查支出数据
+
+    let incomePrediction = 0;
+    let expensePrediction = 0;
+
+    if (lastMonthsIncome.length >= 3) {
+        incomePrediction = calculateMovingAverage(lastMonthsIncome, 3);
+    } else if (lastMonthsIncome.length > 0) {
+        incomePrediction = predictLinearRegression(lastMonthsIncome, lastMonthsIncome.length);
+    }
+
+    if (lastMonthsExpenses.length >= 3) {
+        expensePrediction = calculateMovingAverage(lastMonthsExpenses, 3);
+    } else if (lastMonthsExpenses.length > 0) {
+        expensePrediction = predictLinearRegression(lastMonthsExpenses, lastMonthsExpenses.length);
+    }
+
+    console.log("Predicted Income:", incomePrediction);
+    console.log("Predicted Expense:", expensePrediction);
+
+    return { incomePrediction, expensePrediction };
+}
+
+function updatePredictionUI() {
+    const { incomePrediction, expensePrediction } = predictFutureIncomeOrExpenses();
+
+    if (incomePrediction > 0 || expensePrediction > 0) {
+        document.getElementById('predictedIncome').textContent =
+            `Predicted income for next month: RM ${incomePrediction.toFixed(2)}`;
+        document.getElementById('predictedExpense').textContent =
+            `Predicted expense for next month: RM ${expensePrediction.toFixed(2)}`;
+
+        const remainingBudget = incomePrediction - expensePrediction;
+        const suggestion = remainingBudget < 0
+            ? "Warning: Budget may not be enough, consider reducing expenses!"
+            : "Suggestion: The budget looks healthy, keep it up!";
+        document.getElementById('budgetSuggestion').textContent = suggestion;
+    } else {
+        document.getElementById('predictedIncome').textContent =
+            "Predicted income for next month: RM 0.00";
+        document.getElementById('predictedExpense').textContent =
+            "Predicted expense for next month: RM 0.00";
+        document.getElementById('budgetSuggestion').textContent =
+            "Not enough data to make predictions. Please add more records.";
+    }
+}
+
+</script>
+
+</body>
+</html>
