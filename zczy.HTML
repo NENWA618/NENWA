@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>紫川之影</title>
+<style>
+:root {
+  --primary: #5d4a8a;  /* 紫川主色调 */
+  --secondary: #8a7ca7; /* 辅助紫色 */
+  --accent: #a38fcc;    /* 强调色 */
+  --text: #333333;      /* 正文文字 */
+  --light: #f8f5ff;     /* 背景浅色 */
+  --shadow: 0 4px 20px rgba(93, 74, 138, 0.15);
+}
+
+body {
+  font-family: 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: var(--light);
+  color: var(--text);
+  line-height: 1.8;
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(163, 143, 204, 0.05) 0%, transparent 20%),
+    radial-gradient(circle at 90% 80%, rgba(93, 74, 138, 0.03) 0%, transparent 25%);
+}
+
+.container {
+  max-width: 800px;
+  margin: 40px auto;
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(45deg, var(--accent), transparent 70%);
+  opacity: 0.1;
+}
+
+h1 {
+  color: var(--primary);
+  text-align: center;
+  font-size: 2.6rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 30px;
+  font-family: 'Noto Serif SC', serif;
+  position: relative;
+}
+
+h1::after {
+  content: "";
+  display: block;
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(to right, var(--accent), transparent);
+  margin: 15px auto 0;
+}
+
+p {
+  font-size: 1.1rem;
+  margin-bottom: 1.4rem;
+  color: var(--text);
+  position: relative;
+  z-index: 1;
+}
+
+.highlight {
+  color: var(--primary);
+  font-weight: 500;
+  text-shadow: 0 0 2px rgba(163, 143, 204, 0.3);
+}
+
+/* 特殊段落效果 */
+p:nth-of-type(3) { /* 月亮描写 */
+  color: var(--secondary);
+  font-style: italic;
+}
+
+p:nth-of-type(8) { /* 牛奶溅落 */
+  position: relative;
+  padding-left: 15px;
+}
+
+p:nth-of-type(8)::before {
+  content: "❖";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .container {
+    margin: 20px;
+    padding: 20px;
+  }
+  h1 {
+    font-size: 2rem;
+  }
+}
+
+/* 新增动态特效层 */
+@keyframes quantum-flicker {
+  0%, 100% { opacity: 1; }
+  25% { opacity: 0.97; }
+  50% { opacity: 0.99; }
+  75% { opacity: 0.98; }
+}
+
+@keyframes shadow-lag {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(3px); }
+  100% { transform: translateX(0); }
+}
+
+/* 增强紫川元素表现 */
+.container::after {
+  content: "";
+  position: absolute;
+  bottom: -30px;
+  left: 20%;
+  width: 60%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0.15;
+}
+
+/* 量子化文字特效 */
+.quantum-text {
+  position: relative;
+  display: inline-block;
+}
+.quantum-text::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--accent);
+  clip-path: polygon(0 0, 100% 0, 100% 30%, 0 30%);
+  opacity: 0.6;
+}
+
+/* 关键段落增强 */
+p:nth-of-type(12) { /* 何羽出场段落 */
+  position: relative;
+  padding: 15px;
+  background: rgba(248, 245, 255, 0.7);
+  border-left: 3px solid var(--accent);
+  animation: quantum-flicker 3s infinite;
+}
+
+p:nth-of-type(12)::before {
+  content: "◈";
+  position: absolute;
+  left: -10px;
+  top: 15px;
+  color: var(--primary);
+  font-size: 1.2rem;
+}
+
+/* 无影特效模拟 */
+.no-shadow {
+  text-shadow: 0 0 8px rgba(93, 74, 138, 0.3);
+  position: relative;
+}
+.no-shadow::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 100%;
+  height: 1px;
+  background: var(--accent);
+  transform-origin: right;
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+.no-shadow:hover::before {
+  transform-origin: left;
+  transform: scaleX(1);
+}
+
+/* 时间异常视觉提示 */
+.time-anomaly {
+  font-family: 'Courier New', monospace;
+  letter-spacing: -1px;
+  color: var(--secondary);
+}
+.time-anomaly::after {
+  content: "⌛";
+  margin-left: 3px;
+  opacity: 0.7;
+}
+
+/* 响应式增强 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --light: #1a1429;
+    --text: #e0d6ff;
+    --shadow: 0 4px 20px rgba(93, 74, 138, 0.3);
+  }
+  body {
+    background-image: 
+      radial-gradient(circle at 10% 20%, rgba(93, 74, 138, 0.1) 0%, transparent 20%),
+      radial-gradient(circle at 90% 80%, rgba(163, 143, 204, 0.08) 0%, transparent 25%);
+  }
+}
+
+/* 移动端触觉反馈模拟 */
+@media (max-width: 480px) {
+  p:nth-of-type(8) { /* 牛奶段落 */
+    animation: shadow-lag 2s infinite;
+  }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>紫川之影</h1>
+  <p>一道撕裂般的失重感将我拽出梦境——仿佛有人突然抽走了我身下的床板。</p>
+  
+  <p>我猛地坐起，冷汗浸透后背，手指深深掐进掌心。房间里静得可怕，只有自己狂乱的心跳声在耳边轰鸣。</p>
+  
+  <p>窗外，苍白的月光像一层薄霜，冷冷地覆在地板上。</p>
+  
+  <p>06:21。手机屏幕的蓝光刺得眼睛发疼。我下意识摸了摸自己的瞳孔——半年前那场昏迷后，镜中的自己总带着一圈不自然的紫晕，像被某种不可见的光灼伤过。</p>
+
+  <p>2023年1月2日，星期一。开学第一天。</p>
+  
+  <p>干硬的面包屑卡在喉咙里，电视新闻机械地播报着：
+“紫川县昨夜再添一起昏迷病例，半年来第十三例……专家称受害者脑脊液中检测到异常拓扑量子液体……”</p>
+  
+  <p>牛奶杯突然从指间滑落。乳白色的液体溅在袖口上，竟以肉眼可见的速度氧化发黄——仿佛三倍速播放的腐烂过程。</p>
+  
+  <p>初春的雨带着锈味。水珠砸在太阳穴上，每一滴都像一根烧红的针。</p>
+  
+  <p>紫川县的人总说，这阴湿的气候养出了水灵的美人。可我只觉得，那些苍白的皮肤下仿佛流淌着另一种东西。</p>
+  
+  <p>7:50。教室喧嚣如常，却在我踏入的瞬间安静了一拍。</p>
+  
+  <p>倒数第一排，靠窗的座位旁——多了一个人。</p>
+  
+  <p>她的黑发像一泓墨水倾泻而下，皮肤白得近乎透明。当阳光穿过她的身体时，地板上本该出现影子的地方，却浮现出一片诡异的紫金色光晕，如同水面上的油膜。更奇怪的是，当我快速眨眼时，那光晕中会短暂地闪现出三个重叠的残影，每个都滞后约三分之一秒，就像老式放映机卡顿的画面。</p>
+
+  <p>可能...是高烧后遗症？我揉了揉眼睛。</p>
+  
+  <p>"我叫何羽。"她转过头，紫色瞳孔里映出我僵硬的脸，"你呢？"</p>
+  
+  <p>“叶……叶秋书。”</p>
+  
+  <p>此刻我目光钉在了她课桌下方——几十片枯黄的落叶诡异地堆成小丘。可窗外分明是初春的嫩绿。</p>
+
+  <p>其中一片枯叶缓缓飘落，却在接触地板的瞬间，像被擦除的笔迹般褪去了所有阴影。</p>
+  
+  <p>自上课铃响起整整四十五分钟，没有一个人看向她，也没有老师点到她的名。</p>
+</div>
+</body>
+</html>
