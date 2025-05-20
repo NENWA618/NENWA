@@ -2,7 +2,7 @@ import * as budget from "./budget.js";
 
 // Service Worker 注册
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').catch(() => {});
+  navigator.serviceWorker.register('service-worker.js').catch(() => {});
 }
 
 function showError(msg) {
