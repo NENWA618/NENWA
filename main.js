@@ -1,11 +1,6 @@
 import * as budget from './budget.js';
 
-// Service Worker 注册
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function() {
-    navigator.serviceWorker.register('service-worker.js');
-  });
-}
+
 
 // 量子常数
 const tP = 5.39e-44;
