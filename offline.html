@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>NENWA 离线模式</title>
+  <meta name="theme-color" content="#9d00ff">
+  <link rel="icon" href="NENWA.png">
+  <link rel="stylesheet" href="main.css">
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0a0a20 0%, #6e00ff 100%);
+      color: #f8f8f8;
+      text-align: center;
+    }
+    .offline-container {
+      background: rgba(26,26,58,0.85);
+      border-radius: 16px;
+      padding: 40px 30px;
+      box-shadow: 0 8px 32px rgba(157,0,255,0.18);
+      max-width: 400px;
+    }
+    .offline-container img {
+      width: 96px;
+      margin-bottom: 20px;
+    }
+    h1 {
+      font-family: 'Orbitron', 'Arial', sans-serif;
+      font-size: 2em;
+      margin-bottom: 0.5em;
+      color: #00f0ff;
+    }
+    p {
+      color: #ccc;
+      margin-bottom: 1.5em;
+    }
+    .retry-btn {
+      background: #9d00ff;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.7em 2em;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .retry-btn:hover {
+      background: #00f0ff;
+      color: #0a0a20;
+    }
+  </style>
+</head>
+<body>
+  <div class="offline-container">
+    <img src="NENWA.png" alt="NENWA Logo">
+    <h1>离线模式</h1>
+    <p>当前无法连接到网络。<br>您可以继续浏览已缓存的内容，或稍后重试。</p>
+    <button class="retry-btn" onclick="window.location.reload()">重试连接</button>
+  </div>
+</body>
+</html>
