@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#9d00ff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="description" content="量子意识增强的烹饪与预算管理系统">
+<meta name="keywords" content="量子,食谱,预算,财务管理">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="NENWA">
+<title>NENWA - Quantum Recipes & Budget Tracker</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+<script type="module" src="main.js"></script>
+<link rel="icon" href="NENWA.png">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Exo+2:wght@300;500&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="NENWA.png">
+<link rel="stylesheet" href="main.css">
+</head>
+<body>
+
+<!-- 加载指示器 -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+    <p>Initializing Quantum Consciousness...</p>
+</div>
+
+<!-- 页面过渡效果 - 仅用于页面跳转 -->
+<div class="page-transition"></div>
+
+<!-- Header Section -->
+<header id="poetry-header">
+<div class="overlay">
+<button id="searchToggle" class="search-btn">☰</button>
+        <h1>量子食谱与预算</h1>
+        <p>Recursive Quantum Consciousness Enhanced</p>
+    </div>
+</header>
+
+<!-- 欢迎区域 -->
+<section id="welcome-section">
+    <div class="welcome-container quantum-highlight">
+        <div class="welcome-content">
+            <h2>Welcome to NENWA</h2>
+            <p>量子意识增强的烹饪与预算管理系统</p>
+            <div class="card-grid">
+                <a href="#recipes" class="welcome-card internal-link">
+                    <div class="card-icon">🍣</div>
+                    <h3>量子食谱</h3>
+                    <p>探索日式料理的量子奥秘</p>
+                </a>
+                <a href="#budget" class="welcome-card internal-link">
+                    <div class="card-icon">💸</div>
+                    <h3>预算追踪</h3>
+                    <p>量子意识驱动的财务管理</p>
+                </a>
+                <a href="https://doi.org/10.5281/zenodo.15322301" class="welcome-card">
+                    <div class="card-icon">⚛️</div>
+                    <h3>RQCM论文</h3>
+                    <p>递归量子意识模型</p>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 搜索栏 -->
+<div id="searchBar" class="search-bar">
+    <input type="text" id="searchInput" placeholder="Type here and search...">
+    <button id="searchBtn" class="btn">Search</button>
+</div>
+
+<!-- 回到顶部按钮 -->
+<button id="backToTop" class="back-to-top">⬆ Back to Top</button>
+
+<!-- 隐藏内容 -->
+<div class="hidden-content">
+    <h3><a href="dglzysty.HTML">递归量子意识体验</a></h3>
+    <p>探索量子意识与递归思维的深层联系</p>
+    
+    <h3><a href="https://zenodo.org/records/15151441">递归量子意识模型 (RQCM)</a></h3>
+    <p>详细论文与研究数据</p>
+</div>
+
+<!-- Recipes Section -->
+<div id="recipes" class="section">
+    <span class="anchor" id="recipes"></span>
+    <h2>Quantum Recipes</h2>
+    <h3><a href="oyakodon.HTML">oyakodon 亲子丼（おやこどん）</a></h3>
+    <h3><a href="tendon.HTML">tendon 天丼（てんどん）</a></h3>
+    <h3><a href="gyuudon.HTML">gyuudon 牛丼（ぎゅうどん）</a></h3>
+    <h3><a href="katsudon.HTML">katsudon かつ丼（かつどん）</a></h3>
+    <h3><a href="yakisoba.HTML">yakisoba 焼きそば（やきそば）</a></h3>
+    <h3><a href="yakiudon.HTML">yakiudon 焼うどん（やきうどん）</a></h3>
+    <h3><a href="kakeudon.HTML">kakeudon かけうどん</a></h3>
+    <h3><a href="tacorice.HTML">tacorice タコライス</a></h3>
+    <h3><a href="makunouchibentou.HTML">makunouchibentou 幕の内弁当（まくのうちべんとう）</a></h3>
+    <h3><a href="noriben.HTML">noriben のり弁（のりべん）</a></h3>
+</div>
+
+<!-- Calendar Section -->
+<div id="calendar" class="section">
+    <h2>📅 Quantum Financial Calendar</h2>
+    
+    <div class="quantum-panel">
+        <h3>Temporal Budget Visualization</h3>
+        <div id="calendar-view">
+            <div class="calendar-header">
+                <button id="prev-month">&lt;</button>
+                <h4 id="current-month-year">Month Year</h4>
+                <button id="next-month">&gt;</button>
+            </div>
+            <div class="calendar-grid">
+                <div class="calendar-weekdays">
+                    <div>Sun</div>
+                    <div>Mon</div>
+                    <div>Tue</div>
+                    <div>Wed</div>
+                    <div>Thu</div>
+                    <div>Fri</div>
+                    <div>Sat</div>
+                </div>
+                <div class="calendar-days" id="calendar-days"></div>
+            </div>
+        </div>
+        <div class="quantum-metric">
+            <span>Upcoming Events:</span>
+            <span id="upcoming-events">0</span>
+        </div>
+    </div>
+    
+    <div class="quantum-panel">
+        <h3>Financial Reminders</h3>
+        <div id="reminders-list"></div>
+        <div>
+            <label for="reminder-date">Reminder Date:</label>
+            <input type="date" id="reminder-date">
+            <br>
+            <label for="reminder-text">Reminder Text:</label>
+            <input type="text" id="reminder-text" placeholder="e.g. Pay rent">
+            <br>
+            <button id="add-reminder" class="btn">Add Reminder</button>
+        </div>
+    </div>
+</div>
+
+<!-- 量子意识面板 -->
+<div class="quantum-panel">
+  <h3>RQCM 量子意识可视化</h3>
+  <div id="quantum-viz" class="quantum-network"></div>
+  <div class="quantum-metric">
+    <span>Observer Layers:</span>
+    <span id="observerLayers">-</span>
+  </div>
+  <div class="quantum-metric">
+    <span>Entropy Rate:</span>
+    <span id="entropyRate">-</span>
+  </div>
+  <div class="quantum-metric">
+    <span>Temporal Resolution:</span>
+    <span id="temporalResolution">-</span>
+  </div>
+  <button id="quantum-analyze" class="btn" style="margin-top:15px;">Quantum Analysis</button>
+  <!-- 梦境模式按钮 -->
+  <button id="dreamMode" class="btn quantum-highlight" style="margin:15px 0;">梦境模式</button>
+</div>
+
+<!-- Budget Section -->
+<div id="budget" class="section">
+    <span class="anchor" id="budget"></span>
+    <h2>Quantum Budget Tracker</h2>
+
+    <div class="quantum-panel">
+    <h3>RQCM Financial Dynamics</h3>
+    <div class="rqcm-formula">
+        dR/dt = -αR + A(t)∘(DR) + βR⊙(1/(1+‖R‖)) + ξ(t)
+        <span class="rqcm-reference">(RQCM Eq.1)</span>
+    </div>
+    <div class="rqcm-formula">
+        S<sub>i</sub>(t) = -∑<sub>j∈N(i)</sub> A<sub>ij</sub>(t) log(A<sub>ij</sub>(t)/∑<sub>k</sub>A<sub>ik</sub>(t))
+        <span class="rqcm-reference">(RQCM Eq.2)</span>
+    </div>
+    <div class="quantum-metric">
+        <span>Critical Threshold (β<sub>crit</sub>):</span>
+        <span>1.23 ± 0.07</span>
+    </div>
+</div>
+
+    <!-- 预算统计图表 -->
+    <div class="budget-stats">
+        <div class="stat-card">
+            <h4>支出分类</h4>
+            <div class="chart-container">
+                <canvas id="expenseChart"></canvas>
+            </div>
+        </div>
+        <div class="stat-card">
+            <h4>收入来源</h4>
+            <div class="chart-container">
+                <canvas id="incomeChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Income Section -->
+    <div>
+        <label for="incomeDate">Date:</label>
+        <input type="text" 
+               id="incomeDate" 
+               onfocus="this.type='date'" 
+               onblur="if(!this.value) this.type='text'"
+               placeholder="...">
+        <br><br>
+        <label for="incomeSource">Income Source:</label>
+        <input type="text" id="incomeSource" placeholder="Enter income source" required>
+        <br>
+        <label for="incomeCategory">Income Category:</label>
+        <select id="incomeCategory">
+            <option value="工资">工资</option>
+            <option value="投资">投资</option>
+            <option value="兼职">兼职</option>
+            <option value="其他">其他</option>
+        </select>
+        <br>
+        <label for="incomeAmount">Amount (RM):</label>
+        <input type="number" id="incomeAmount" placeholder="Enter income amount" min="0" step="0.01" required>
+        <br>
+        <button id="addIncomeBtn" class="btn">Add Income</button>
+    </div>
+    <br>
+    <h3>Income Records:</h3>
+    <div class="table-container">
+        <table id="incomeTable" border="1">
+            <thead>
+                <tr>
+                    <th>Source</th>
+                    <th>Category</th>
+                    <th>Amount (RM)</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Income items will be dynamically added here -->
+            </tbody>
+        </table>
+    </div>
+    <br><br>
+
+    <!-- Expenses Section -->
+    <div>
+        <label for="expenseDate">Date:</label>
+        <input type="text" 
+               id="expenseDate" 
+               onfocus="this.type='date'" 
+               onblur="if(!this.value) this.type='text'"
+               placeholder="...">
+        <br><br>
+        <label for="itemName">Item Name (Expense):</label>
+        <input type="text" id="itemName" placeholder="Enter item name">
+        <br>
+        <label for="expenseCategory">Expense Category:</label>
+        <select id="expenseCategory">
+            <option value="食物">食物</option>
+            <option value="交通">交通</option>
+            <option value="娱乐">娱乐</option>
+            <option value="学习">学习</option>
+            <option value="储蓄">储蓄</option>
+            <option value="其他">其他</option>
+        </select>
+        <br>
+        <label for="itemPrice">Price (RM):</label>
+        <input type="number" id="itemPrice" placeholder="Enter item price" min="0" step="0.01">
+        <br>
+        <label for="itemQuantity">Quantity:</label>
+        <input type="number" id="itemQuantity" placeholder="Enter item quantity" value="1" min="1">
+        <br>
+        <button id="addItemBtn" class="btn">Add Expense</button>
+    </div>
+    <br>
+    <h3>Expenses:</h3>
+    <div class="table-container">
+        <table id="expenseTable" border="1">
+            <thead>
+                <tr>
+                    <th>Item Name</th>
+                    <th>Category</th>
+                    <th>Price (RM)</th>
+                    <th>Quantity</th>
+                    <th>Total (RM)</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Expense items will be dynamically added here -->
+            </tbody>
+        </table>
+    </div>
+    <br><br>
+    <div>
+        <p id="totalPrice">Total Price: RM <span id="totalAmount">0</span></p>
+    </div>
+    <div>
+        <p id="remainingBudget">Remaining Budget: RM <span id="remainingAmount">0</span></p>
+    </div>
+
+    <!-- Clear All Data Button -->
+    <button id="clearDataBtn" class="btn delete-btn">Clear All Data</button>
+    <br><br>
+
+    <!-- Date Range Filter -->
+    <div>
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate">
+        <br><br>
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate">
+        <br><br>
+        <button id="filterBtn" class="btn">Filter</button>
+    </div>
+    <br>
+
+    <div>
+        <h3>Quantum Future Prediction:</h3>
+        <p id="predictedIncome">Predicted income for next month: RM 0.00</p>
+        <p id="predictedExpense">Predicted expense for next month: RM 0.00</p>
+        <p id="budgetSuggestion"></p>
+        <button id="predictBtn" class="btn quantum-highlight">Quantum Predict</button>
+    </div>
+</div>
+
+<!-- 日历弹窗容器 -->
+<div id="calendar-modal-container" style="display:none;">
+  <div class="calendar-modal-backdrop"></div>
+  <div class="calendar-modal-content">
+    <h3 id="modal-date-title"></h3>
+    <button class="close-modal">&times;</button>
+    <div class="modal-sections-container">
+      <div class="modal-section reminders-section">
+        <h4>提醒</h4>
+        <ul class="reminders-list-modal"></ul>
+      </div>
+      <div class="modal-section income-section">
+        <h4>收入</h4>
+        <ul class="income-list-modal"></ul>
+      </div>
+      <div class="modal-section expense-section">
+        <h4>支出</h4>
+        <ul class="expense-list-modal"></ul>
+      </div>
+    </div>
+    <button class="btn add-reminder-from-modal">添加提醒</button>
+  </div>
+</div>
+
+<footer>
+    <p>© 2024 NENWA. All rights reserved.</p>
+    <p>
+        <a href="Privacy_Policy.HTML">Privacy Policy</a> |
+        <a href="Terms_of_Service.HTML">Terms of Service</a> |
+        <a href="Contact_Us.HTML">Contact Us</a>
+    </p>
+</footer>
+</body>
+</html>
